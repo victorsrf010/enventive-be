@@ -9,9 +9,11 @@ if (isset($_POST['event'])) {
     if ($_POST['event'] == 'invite') {
         invite($_POST);
     }
+}
 
-    if ($_POST['event'] == 'remove-invite') {
-        removeInvite($_POST);
+if (isset($_GET['event'])) {
+    if ($_GET['event'] == 'removeInvite') {
+        removeInvite($_GET);
     }
 }
 
@@ -38,7 +40,9 @@ function invite($req)
         $_SESSION['errors'][] = 'User with the provided email does not exist.';
     }
 
-    header("location:" . returnHeader($req));
+    $returnUrl = isset($_POST['return_url']) ? $_POST['return_url'] : null;
+
+    header("location:" . returnHeader($req, $returnUrl));
 }
 
 function removeInvite($req)
@@ -55,13 +59,13 @@ function removeInvite($req)
         $_SESSION['errors'][] = 'Error removing invitation.';
     }
 
-    header("location:" . returnHeader($req));
+    $returnUrl = isset($_GET['return_url']) ? $_GET['return_url'] : null;
+
+    header("location:" . returnHeader($req, $returnUrl));
 }
 
-function returnHeader($req)
+function returnHeader($req, $returnUrl)
 {
-    $returnUrl = isset($_POST['return_url']) ? $_POST['return_url'] : '/'; // Default to home page if return URL is not set
-
     if (!$returnUrl) {
         $params = '?' . http_build_query($req);
 

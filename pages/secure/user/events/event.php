@@ -122,7 +122,6 @@ $title = ' - Event';
             </div>
         </div>
 
-
         <div class="table-responsive">
             <table class="table">
                 <thead class="table-secondary">
@@ -133,30 +132,52 @@ $title = ' - Event';
                 </tr>
                 </thead>
                 <tbody>
-                <?php
-                if ($eventId) {
-                    foreach ($invitedUsers as $user) {
-                        ?>
+                <?php if ($eventId): ?>
+                    <?php foreach ($invitedUsers as $user): ?>
                         <tr>
                             <th scope="row">
                                 <?= $user['name'] ?>
                             </th>
-                            <th scope="row">
+                            <td>
                                 <?= $user['email'] ?>
-                            </th>
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content">
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#remove<?= $user['id'] ?>">
+                                        Remove
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
-                        <?php
-                    }
-                }
-                ?>
+
+                        <div class="modal fade" id="remove<?= $user['id'] ?>" tabindex="-1" aria-labelledby="removeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="removeModalLabel">Remove User</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to remove <?= $user['name'] ?> from the event?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <a href="/crud/controllers/userEvent.php?<?= htmlspecialchars($_SERVER['REQUEST_URI']) ?>&event=removeInvite&user_id=<?= $user['id'] ?>&event_id=<?= $eventId ?>">
+                                            <button type="button" class="btn btn-danger">Confirm</button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
                 </tbody>
             </table>
         </div>
     </section>
-
 </main>
 
 <?php
 require_once __DIR__ . '/../../../../templates/footer.php';
 ?>
-
