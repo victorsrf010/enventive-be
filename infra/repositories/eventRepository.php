@@ -136,3 +136,17 @@ function deleteEvent($id)
         return false;
     }
 }
+
+function getUserEvents($user_id) {
+    $PDOStatement = $GLOBALS['pdo']->prepare('SELECT * FROM events WHERE created_by = ?;');
+    $PDOStatement->bindValue(1, $user_id, PDO::PARAM_INT);
+    $PDOStatement->execute();
+
+    $events = [];
+    while ($event = $PDOStatement->fetch(PDO::FETCH_ASSOC)) {
+        $events[] = $event;
+    }
+
+    return $events;
+}
+

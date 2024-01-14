@@ -14,7 +14,7 @@ $title = '- App';
     </header>
     <div class="p-5 mb-4 bg-body-tertiary rounded-3">
         <div class="container-fluid py-5">
-            <h1 class="display-5 fw-bold">Hello
+            <h1 class="display-5 fw-bold">Hello,
                 <?= $user['name'] ?? null ?>!
             </h1>
             <p class="col-md-8 fs-4">Ready for today?</p>
@@ -36,13 +36,22 @@ $title = '- App';
         </div>
 
         <?php
-        if (isAuthenticated() && $user['administrator']) {
-            echo '<div class="col-md-6">
+        if (isAuthenticated()) {
+            if ($user['administrator']) {
+                echo '<div class="col-md-6">
                     <div class="h-100 p-5 bg-body-tertiary border rounded-3">
                         <h2>Admin</h2>
-                        <a href="/crud/pages/secure/admin/"><button class="btn btn-outline-success" type="button">Admin</button></a>
+                        <a href="admin/"><button class="btn btn-outline-success" type="button">Admin</button></a>
                     </div>
                 </div>';
+            } else {
+                echo '<div class="col-md-6">
+                    <div class="h-100 p-5 bg-body-tertiary border rounded-3">
+                        <h2>Events</h2>
+                        <a href="user/events/"><button class="btn btn-outline-success" type="button">Events</button></a>
+                    </div>
+                </div>';
+            }
         }
         ?>
     </div>
