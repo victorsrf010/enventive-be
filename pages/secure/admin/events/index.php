@@ -1,22 +1,22 @@
 <?php
-require_once __DIR__ . '/../../../../infra/repositories/userRepository.php';
+require_once __DIR__ . '/../../../../infra/repositories/eventRepository.php';
 require_once __DIR__ . '/../../../../infra/middlewares/middleware-administrator.php';
 require_once __DIR__ . '/../../../../templates/header.php';
 
-$users = getAll();
+$events = getAllEvents();
 $title = ' - Admin management';
 ?>
 
     <div class="pt-1 ">
         <div class="p-5 mb-2 bg-dark text-white">
-            <h1>Users</h1>
+            <h1>Events</h1>
         </div>
 
         <main class="bg-light">
             <section class="py-4">
                 <div class="d-flex justify-content">
                     <a href="/crud/pages/secure/"><button class="btn btn-secondary px-5 me-2">Back</button></a>
-                    <a href="../user.php"><button class="btn btn-success px-4 me-2">Create user</button></a>
+                    <a href="../event.php"><button class="btn btn-success px-4 me-2">Create event</button></a>
                 </div>
             </section>
             <section>
@@ -43,56 +43,47 @@ $title = ' - Admin management';
                         <thead class="table-secondary">
                         <tr>
                             <th scope="col">Name</th>
-                            <th scope="col">Lastname</th>
-                            <th scope="col">Phone Number</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Administrator</th>
-                            <th scope="col">Manage</th>
+                            <th scope="col">Event At</th>
+                            <th scope="col">Location</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php
-                        foreach ($users as $user) {
+                        foreach ($events as $event) {
                             ?>
                             <tr>
                                 <th scope="row">
-                                    <?= $user['name'] ?>
+                                    <?= $event['name'] ?>
                                 </th>
                                 <td>
-                                    <?= $user['lastname'] ?>
+                                    <?= $event['event_at'] ?>
                                 </td>
                                 <td>
-                                    <?= $user['phoneNumber'] ?>
-                                </td>
-                                <td>
-                                    <?= $user['email'] ?>
-                                </td>
-                                <td>
-                                    <?= $user['administrator'] == '1' ? 'Yes' : 'No' ?>
+                                    <?= $event['location'] ?>
                                 </td>
                                 <td>
                                     <div class="d-flex justify-content">
-                                        <a href="/crud/controllers/admin/user.php?<?= 'user=update&id=' . $user['id'] ?>"><button type="button"
+                                        <a href="/crud/controllers/admin/event.php?<?= 'event=update&id=' . $event['id'] ?>"><button type="button"
                                                                                                                                   class="btn btn-primary me-2">update</button></a>
                                         <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                                data-bs-target="#delete<?= $user['id'] ?>">delete</button>
+                                                data-bs-target="#delete<?= $event['id'] ?>">delete</button>
                                     </div>
                                 </td>
                             </tr>
-                            <div class="modal fade" id="delete<?= $user['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            <div class="modal fade" id="delete<?= $event['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel"
                                  aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Delete user</h1>
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Delete event</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            Are you sure you want to delete this user?
+                                            Are you sure you want to delete this event?
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <a href="/crud/controllers/admin/user.php?<?= 'user=delete&id=' . $user['id'] ?>"><button type="button"
+                                            <a href="/crud/controllers/admin/event.php?<?= 'event=delete&id=' . $event['id'] ?>"><button type="button"
                                                                                                                                       class="btn btn-danger">Confirm</button></a>
                                         </div>
                                     </div>

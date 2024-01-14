@@ -3,10 +3,24 @@
 global $pdo;
 require __DIR__ . '/infra/db/connection.php';
 
-#DROP TABLE
-$pdo->exec('DROP TABLE IF EXISTS users;');
+# DROP TABLES IF THEY EXIST
+$pdo->exec('DROP TABLE IF EXISTS attachments;');
+echo 'Table attachments dropped!' . PHP_EOL;
 
-echo 'table users deleted!' . PHP_EOL;
+$pdo->exec('DROP TABLE IF EXISTS tickets;');
+echo 'Table tickets dropped!' . PHP_EOL;
+
+$pdo->exec('DROP TABLE IF EXISTS users_events;');
+echo 'Table users_events dropped!' . PHP_EOL;
+
+$pdo->exec('DROP TABLE IF EXISTS events;');
+echo 'Table events dropped!' . PHP_EOL;
+
+$pdo->exec('DROP TABLE IF EXISTS users;');
+echo 'Table users dropped!' . PHP_EOL;
+
+$pdo->exec('DROP TABLE IF EXISTS categories;');
+echo 'Table categories dropped!' . PHP_EOL;
 
 #CREATE TABLE
 $pdo->exec(

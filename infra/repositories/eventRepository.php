@@ -6,6 +6,7 @@ function createEvent($event, $created_by)
     // Insert event into the events table
     $sqlCreateEvent = "INSERT INTO 
     events (
+        name,
         description, 
         event_at, 
         location, 
@@ -13,6 +14,7 @@ function createEvent($event, $created_by)
         created_by
     ) 
     VALUES (
+        :name, 
         :description, 
         :event_at, 
         :location, 
@@ -23,6 +25,7 @@ function createEvent($event, $created_by)
     $PDOStatementEvent = $GLOBALS['pdo']->prepare($sqlCreateEvent);
 
     $successEvent = $PDOStatementEvent->execute([
+        ':name' => $event['name'],
         ':description' => $event['description'],
         ':event_at' => $event['event_at'],
         ':location' => $event['location'],
@@ -82,6 +85,7 @@ function updateEvent($event)
 {
     $sqlUpdate = "UPDATE  
     events SET
+        name = :name, 
         description = :description, 
         event_at = :event_at, 
         location = :location, 
@@ -93,6 +97,7 @@ function updateEvent($event)
 
     return $PDOStatement->execute([
         ':id' => $event['id'],
+        ':name' => $event['name'],
         ':description' => $event['description'],
         ':event_at' => $event['event_at'],
         ':location' => $event['location'],
