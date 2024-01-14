@@ -45,6 +45,7 @@ $title = ' - Admin management';
                             <th scope="col">Name</th>
                             <th scope="col">Event At</th>
                             <th scope="col">Location</th>
+                            <th scope="col">Manage</th>
                         </tr>
                         </thead>
                         <tbody>

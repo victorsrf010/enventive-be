@@ -30,7 +30,7 @@ function createEvent($event, $created_by)
         ':event_at' => $event['event_at'],
         ':location' => $event['location'],
         ':category_id' => $event['category_id'],
-        ':created_by' => $created_by
+        ':created_by' => $created_by['id']
     ]);
 
     if ($successEvent) {
@@ -52,7 +52,7 @@ function createEvent($event, $created_by)
 
         // Assuming $created_by is the user ID
         $successUserEvent = $PDOStatementUserEvent->execute([
-            ':user_id' => $created_by,
+            ':user_id' => $created_by['id'],
             ':event_id' => $event['id']
         ]);
 
@@ -108,7 +108,31 @@ function updateEvent($event)
 
 function deleteEvent($id)
 {
-    $PDOStatement = $GLOBALS['pdo']->prepare('DELETE FROM events WHERE id = ?;');
-    $PDOStatement->bindValue(1, $id, PDO::PARAM_INT);
-    return $PDOStatement->execute();
+    $GLOBALS['pdo']->beginTransaction();
+
+    try {
+        // First, delete entries from the user_events table
+        $PDOStatementUserEvent = $GLOBALS['pdo']->prepare('DELETE FROM users_events WHERE event_id = ?;');
+        $PDOStatementUserEvent->bindValue(1, $id, PDO::PARAM_INT);
+        $PDOStatementUserEvent->execute();
+
+        // Second, delete entries from the attachments table (if applicable)
+        $PDOStatementAttachments = $GLOBALS['pdo']->prepare('DELETE FROM attachments WHERE event_id = ?;');
+        $PDOStatementAttachments->bindValue(1, $id, PDO::PARAM_INT);
+        $PDOStatementAttachments->execute();
+
+        // Finally, delete the event itself
+        $PDOStatementEvent = $GLOBALS['pdo']->prepare('DELETE FROM events WHERE id = ?;');
+        $PDOStatementEvent->bindValue(1, $id, PDO::PARAM_INT);
+        $PDOStatementEvent->execute();
+
+        // Commit the transaction if all queries are successful
+        $GLOBALS['pdo']->commit();
+
+        return true;
+    } catch (PDOException $e) {
+        // An error occurred, rollback the transaction
+        $GLOBALS['pdo']->rollBack();
+        return false;
+    }
 }
