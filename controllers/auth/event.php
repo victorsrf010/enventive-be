@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../../infra/repositories/eventRepository.php';
-require_once __DIR__ . '/../../helpers/validations/admin/validate-event.php';
+require_once __DIR__ . '/../../helpers/validations/app/validate-event.php';
 require_once __DIR__ . '/../../helpers/session.php';
 
 if (isset($_POST['event'])) {
@@ -23,7 +23,7 @@ if (isset($_GET['event'])) {
         $event = getEventById($_GET['id']);
         $event['action'] = 'update';
         $params = '?' . http_build_query($event);
-        header('location: /crud/pages/secure/admin/event.php' . $params);
+        header('location: /crud/pages/secure/user/events/event.php' . $params);
     }
 
     if ($_GET['event'] == 'delete') {
@@ -38,7 +38,7 @@ function create($req)
     if (isset($data['invalid'])) {
         $_SESSION['errors'] = $data['invalid'];
         $params = '?' . http_build_query($req);
-        header('location: /crud/pages/secure/admin/event.php' . $params);
+        header('location: /crud/pages/secure/user/events/event.php' . $params);
         return false;
     }
 
@@ -47,12 +47,12 @@ function create($req)
 
     if ($success) {
         $_SESSION['success'] = 'Event created successfully!';
-        header('location: /crud/pages/secure/admin/index.php');
+        header('location: /crud/pages/secure/user/events');
     } else {
         // Display an error message on the same page
         $_SESSION['errors'] = ['Failed to create the event. Please try again.'];
         $params = '?' . http_build_query($req);
-        header('location: /crud/pages/secure/admin/event.php' . $params);
+        header('location: /crud/pages/secure/user/events/event.php' . $params);
     }
 }
 
@@ -68,7 +68,7 @@ function update($req)
         $_SESSION['errors'] = $data['invalid'];
         $_SESSION['action'] = 'update';
         $params = '?' . http_build_query($req);
-        header('location: /crud/pages/secure/admin/event.php' . $params);
+        header('location: /crud/pages/secure/user/events/event.php' . $params);
 
         return false;
     }
@@ -82,7 +82,7 @@ function update($req)
         $_SESSION['success'] = 'Event successfully changed!';
         $data['action'] = 'update';
         $params = '?' . http_build_query($data);
-        header('location: /crud/pages/secure/admin/event.php' . $params);
+        header('location: /crud/pages/secure/user/events/event.php' . $params);
     }
 }
 
@@ -97,5 +97,5 @@ function delete($req)
         $_SESSION['errors'][] = 'Error deleting event.';
     }
 
-    header('location: /crud/pages/secure/admin/index.php');
+    header('location: /crud/pages/secure/user/events');
 }

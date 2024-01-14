@@ -7,9 +7,6 @@ require __DIR__ . '/infra/db/connection.php';
 $pdo->exec('DROP TABLE IF EXISTS attachments;');
 echo 'Table attachments dropped!' . PHP_EOL;
 
-$pdo->exec('DROP TABLE IF EXISTS tickets;');
-echo 'Table tickets dropped!' . PHP_EOL;
-
 $pdo->exec('DROP TABLE IF EXISTS users_events;');
 echo 'Table users_events dropped!' . PHP_EOL;
 
@@ -86,3 +83,76 @@ $success = $PDOStatement->execute([
 ]);
 
 echo 'Default user created!';
+
+# CREATE CATEGORIES TABLE
+$pdo->exec(
+    'CREATE TABLE categories (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        name VARCHAR(100) NOT NULL
+    );'
+);
+echo 'Table categories created!' . PHP_EOL;
+
+# CREATE EVENTS TABLE
+$pdo->exec(
+    'CREATE TABLE events (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        name VARCHAR(255) NOT NULL,
+        description TEXT,
+        event_at DATETIME NOT NULL,
+        location VARCHAR(255),
+        category_id INT,
+        created_by INT,
+        FOREIGN KEY (category_id) REFERENCES categories(id),
+        FOREIGN KEY (created_by) REFERENCES users(id)
+    );'
+);
+echo 'Table events created!' . PHP_EOL;
+
+# CREATE USERS_EVENTS TABLE
+$pdo->exec(
+    'CREATE TABLE users_events (
+        user_id INT,
+        event_id INT,
+        PRIMARY KEY (user_id, event_id),
+        FOREIGN KEY (user_id) REFERENCES users(id),
+        FOREIGN KEY (event_id) REFERENCES events(id)
+    );'
+);
+echo 'Table users_events created!' . PHP_EOL;
+
+# CREATE ATTACHMENTS TABLE
+$pdo->exec(
+    'CREATE TABLE attachments (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        event_id INT,
+        file_path VARCHAR(255),
+        file_type VARCHAR(50),
+        FOREIGN KEY (event_id) REFERENCES events(id)
+    );'
+);
+echo 'Table attachments created!' . PHP_EOL;
+
+# INSERT DEFAULT CATEGORY
+$pdo->exec(
+    'INSERT INTO categories (name) VALUES ("Default Category");'
+);
+echo 'Default category inserted!' . PHP_EOL;
+
+# INSERT DEFAULT EVENT
+$pdo->exec(
+    'INSERT INTO events (name, description, event_at, location, category_id, created_by) VALUES ("Default Event", "Default Event Description", NOW(), "Default Location", 1, 1);'
+);
+echo 'Default event inserted!' . PHP_EOL;
+
+# INSERT USER INTO USERS_EVENTS
+$pdo->exec(
+    'INSERT INTO users_events (user_id, event_id) VALUES (1, 1);'
+);
+echo 'User inserted into users_events!' . PHP_EOL;
+
+# INSERT DEFAULT ATTACHMENT
+$pdo->exec(
+    'INSERT INTO attachments (event_id, file_path, file_type) VALUES (1, "/path/to/default_attachment.jpg", "image/jpeg");'
+);
+echo 'Default attachment inserted!' . PHP_EOL;
