@@ -1,5 +1,6 @@
 <?php
 #EASY DATABASE SETUP
+global $pdo;
 require __DIR__ . '/infra/db/connection.php';
 
 #DROP TABLE

@@ -19,13 +19,14 @@ function isSignUpValid($req)
         return ['invalid' => $errors];
     }
 
-    if (empty($req['password']) && strlen($req['password']) < 6) {
+    if (empty($req['password']) || strlen($req['password']) < 6) {
         $errors['password'] = 'The Password field cannot be empty and must be at least 6 characters long.';
     }
 
-    if ($req['confirm_password'] != $req['password']) {
+    if (empty($req['confirm_password']) || $req['confirm_password'] != $req['password']) {
         $errors['confirm_password'] = 'The Confirm Password field must not be empty and must be the same as the Password field.';
     }
+
 
     if (isset($errors)) {
         return ['invalid' => $errors];
