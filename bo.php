@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/infra/middlewares/middleware-not-authenticated.php';
-// require_once __DIR__ . './setupdatabase.php';
+//require_once __DIR__ . './setupdatabase.php';
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +22,7 @@ require_once __DIR__ . '/infra/middlewares/middleware-not-authenticated.php';
     <div class="container py-4">
             <header class="pb-3 mb-4 border-bottom">
                 <a href="/" class="d-flex align-items-center text-dark text-decoration-none"><img
-                        src="/crud/assets/images/logo-estg.svg" alt="ESTG" class="mw-100"></a>
+                        src="/crud/assets/images/logo-estg.svg" alt="eventive" class="mw-100"></a>
             </header>
             <div class="p-5 mb-4 bg-body-tertiary rounded">
                 <div class="container-fluid py-5 ">
@@ -37,7 +37,7 @@ require_once __DIR__ . '/infra/middlewares/middleware-not-authenticated.php';
             </div>
 
             <footer class="p-3 bg-dark text-white mt-4">
-                <article>IPVC ESTG - Engenharia Informática &copy; - 2023-2024</article>
+                <article>Eventive &copy; - 2023-2024</article>
             </footer>
         </div>
     </main>

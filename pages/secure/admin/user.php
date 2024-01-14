@@ -7,7 +7,7 @@ $title = ' - user';
 
 <main>
   <section class="py-4">
-    <a href="./"><button type="button" class="btn btn-secondary px-5">Back</button></a>
+    <a href="users/index.php"><button type="button" class="btn btn-secondary px-5">Back</button></a>
   </section>
   <section>
     <?php

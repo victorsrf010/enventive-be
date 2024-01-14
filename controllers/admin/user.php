@@ -35,7 +35,7 @@ if (isset($_GET['user'])) {
         $user = getById($_GET['id']);
         if ($user['administrator']) {
             $_SESSION['errors'] = ['This user cannot be deleted!'];
-            header('location: /crud/pages/secure/admin/');
+            header('location: /crud/pages/secure/admin/index.php');
             return false;
         }
 
@@ -43,7 +43,7 @@ if (isset($_GET['user'])) {
 
         if ($success) {
             $_SESSION['success'] = 'User deleted successfully!';
-            header('location: /crud/pages/secure/admin/');
+            header('location: /crud/pages/secure/admin/index.php');
         }
     }
 }
@@ -63,7 +63,7 @@ function create($req)
 
     if ($success) {
         $_SESSION['success'] = 'User created successfully!';
-        header('location: /crud/pages/secure/admin/');
+        header('location: /crud/pages/secure/admin/index.php');
     }
 }
 
@@ -126,7 +126,7 @@ function changePassword($req)
         $success = updatePassword($data);
         if ($success) {
             $_SESSION['success'] = 'Password successfully changed!';
-            header('location: /crud/pages/secure//user/password.php');
+            header('location: /crud/pages/secure/user/password.php');
         }
     }
 }
