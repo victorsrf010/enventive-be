@@ -41,14 +41,23 @@ function getEventById($id)
     return $PDOStatement->fetch();
 }
 
-function getAllEvents()
+function getAllEvents($category_id = null)
 {
-    $PDOStatement = $GLOBALS['pdo']->query('SELECT * FROM events;');
-    $events = [];
-    while ($event = $PDOStatement->fetch()) {
-        $events[] = $event;
+    $query = 'SELECT * FROM events';
+
+
+    if ($category_id) {
+        $query .= 'AND category_id = :category_id';
     }
-    return $events;
+
+    $PDOStatement = $GLOBALS['pdo']->prepare($query);
+
+    if ($category_id) {
+        $PDOStatement->bindValue(':category_id', $category_id, PDO::PARAM_INT);
+    }
+
+    $PDOStatement->execute();
+    return $PDOStatement->fetchAll();
 }
 
 function updateEvent($event)

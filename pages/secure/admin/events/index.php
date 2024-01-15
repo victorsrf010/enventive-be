@@ -1,11 +1,16 @@
 <?php
 require_once __DIR__ . '/../../../../infra/repositories/eventRepository.php';
 require_once __DIR__ . '/../../../../infra/repositories/userRepository.php';
+require_once __DIR__ . '/../../../../infra/repositories/categoryRepository.php';
+require_once __DIR__ . '/../../../../infra/repositories/eventRepository.php';
 require_once __DIR__ . '/../../../../infra/middlewares/middleware-administrator.php';
 require_once __DIR__ . '/../../../../templates/header.php';
 
-$events = getAllEvents();
+$selectedCategory = isset($_GET['category']) ? $_GET['category'] : null;
+
+$events = getAllEvents($selectedCategory);
 $title = ' - Admin management';
+
 ?>
 
     <div class="pt-1 ">
@@ -22,6 +27,19 @@ $title = ' - Admin management';
                     <a href="../event.php">
                         <button class="btn btn-success px-4 me-2">Create event</button>
                     </a>
+                    <select class="btn btn-secondary px-5 me-2" id="category" name="category_id" required>
+                        <option value="all" <?= isset($event['category_id']) && $event['category_id'] === 'all' ? 'selected' : '' ?>>
+                            All
+                        </option>
+
+                        <?php
+                        $categories = getAllCategories();
+                        foreach ($categories as $category): ?>
+                            <option value="<?= htmlspecialchars($category['id']) ?>" <?= isset($event['category_id']) && $event['category_id'] == $category['id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($category['name']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
             </section>
             <section>
@@ -48,6 +66,7 @@ $title = ' - Admin management';
                         <thead class="table-secondary">
                         <tr>
                             <th scope="col">Name</th>
+                            <th scope="col">Category</th>
                             <th scope="col">Event At</th>
                             <th scope="col">Location</th>
                             <th scope="col">Owner</th>
@@ -61,6 +80,13 @@ $title = ' - Admin management';
                             <tr>
                                 <th scope="row">
                                     <?= $event['name'] ?>
+                                </th>
+                                <th scope="row">
+                                    <?php
+                                    $category = getCategoryById($event['category_id']);
+
+                                    echo $category['name'];
+                                    ?>
                                 </th>
                                 <td>
                                     <?= $event['event_at'] ?>

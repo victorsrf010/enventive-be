@@ -50,7 +50,7 @@ $title = '- App';
                 echo '<div class="col-md-6">
                     <div class="h-100 p-5 bg-body-tertiary border rounded-3">
                         <h2>Admin</h2>
-                        <a href="admin/"><button class="btn btn-outline-success" type="button">Admin</button></a>
+                        <a href="./admin"><button class="btn btn-outline-success" type="button">Admin</button></a>
                     </div>
                 </div>';
             } else {
