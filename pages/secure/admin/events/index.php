@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../../infra/repositories/eventRepository.php';
+require_once __DIR__ . '/../../../../infra/repositories/userRepository.php';
 require_once __DIR__ . '/../../../../infra/middlewares/middleware-administrator.php';
 require_once __DIR__ . '/../../../../templates/header.php';
 
@@ -15,8 +16,12 @@ $title = ' - Admin management';
         <main class="bg-light">
             <section class="py-4">
                 <div class="d-flex justify-content">
-                    <a href="/crud/pages/secure/"><button class="btn btn-secondary px-5 me-2">Back</button></a>
-                    <a href="../event.php"><button class="btn btn-success px-4 me-2">Create event</button></a>
+                    <a href="../index.php">
+                        <button class="btn btn-secondary px-5 me-2">Back</button>
+                    </a>
+                    <a href="../event.php">
+                        <button class="btn btn-success px-4 me-2">Create event</button>
+                    </a>
                 </div>
             </section>
             <section>
@@ -45,6 +50,7 @@ $title = ' - Admin management';
                             <th scope="col">Name</th>
                             <th scope="col">Event At</th>
                             <th scope="col">Location</th>
+                            <th scope="col">Owner</th>
                             <th scope="col">Manage</th>
                         </tr>
                         </thead>
@@ -63,29 +69,47 @@ $title = ' - Admin management';
                                     <?= $event['location'] ?>
                                 </td>
                                 <td>
+                                    <?php
+                                    $user = getById($event['created_by']);
+
+                                    echo $user['name'] . " " . $user['lastname']
+                                    ?>
+                                </td>
+                                <td>
                                     <div class="d-flex justify-content">
-                                        <a href="/crud/controllers/admin/event.php?<?= 'event=update&id=' . $event['id'] ?>"><button type="button"
-                                                                                                                                  class="btn btn-primary me-2">update</button></a>
+                                        <a href="/crud/controllers/admin/event.php?<?= 'event=update&id=' . $event['id'] ?>">
+                                            <button type="button"
+                                                    class="btn btn-primary me-2">update
+                                            </button>
+                                        </a>
                                         <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                                data-bs-target="#delete<?= $event['id'] ?>">delete</button>
+                                                data-bs-target="#delete<?= $event['id'] ?>">delete
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
-                            <div class="modal fade" id="delete<?= $event['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            <div class="modal fade" id="delete<?= $event['id'] ?>" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel"
                                  aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h1 class="modal-title fs-5" id="exampleModalLabel">Delete event</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             Are you sure you want to delete this event?
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <a href="/crud/controllers/admin/event.php?<?= 'event=delete&id=' . $event['id'] ?>"><button type="button"
-                                                                                                                                      class="btn btn-danger">Confirm</button></a>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Close
+                                            </button>
+                                            <a href="/crud/controllers/admin/event.php?<?= 'event=delete&id=' . $event['id'] ?>">
+                                                <button type="button"
+                                                        class="btn btn-danger">Confirm
+                                                </button>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

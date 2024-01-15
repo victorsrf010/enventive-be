@@ -35,7 +35,7 @@ if (isset($_GET['user'])) {
         $user = getById($_GET['id']);
         if ($user['administrator']) {
             $_SESSION['errors'] = ['This user cannot be deleted!'];
-            header('location: /crud/pages/secure/admin/userEvents.php');
+            header('location: /crud/pages/secure/admin/users');
             return false;
         }
 
@@ -43,7 +43,7 @@ if (isset($_GET['user'])) {
 
         if ($success) {
             $_SESSION['success'] = 'User deleted successfully!';
-            header('location: /crud/pages/secure/admin/userEvents.php');
+            header('location: /crud/pages/secure/admin/users');
         }
     }
 }
@@ -63,7 +63,7 @@ function create($req)
 
     if ($success) {
         $_SESSION['success'] = 'User created successfully!';
-        header('location: /crud/pages/secure/admin/userEvents.php');
+        header('location: /crud/pages/secure/admin/users');
     }
 }
 

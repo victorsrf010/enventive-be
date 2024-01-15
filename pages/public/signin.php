@@ -34,7 +34,7 @@ $title = ' - Sign In';
     </div>
     <button class="w-100 btn btn-lg btn-success mb-2" type="submit" name="user" value="login">Sign In</button>
   </form>
-  <a href="/crud"><button class="w-100 btn btn-lg btn-info">Back</button></a>
+  <a href="../../bo.php"><button class="w-100 btn btn-lg btn-info">Back</button></a>
 </main>
 <?php
 include_once __DIR__ . '../../../templates/footer.php';
