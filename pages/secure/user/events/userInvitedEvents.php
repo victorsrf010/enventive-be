@@ -67,42 +67,11 @@ $title = ' - Your events';
                                     <?= $event['location'] ?>
                                 </td>
                                 <td>
-                                    <div class="d-flex justify-content">
-                                        <a>
-                                            <button type="button" class="btn btn-primary me-2">See More</button>
-                                        </a>
-                                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                                data-bs-target="#<?= $modalId ?>">Delete
-                                        </button>
-                                    </div>
+                                    <a>
+                                        <button type="button" class="btn btn-primary me-2">See More</button>
+                                    </a>
                                 </td>
                             </tr>
-                            <div class="modal fade" id="<?= $modalId ?>" tabindex="-1"
-                                 aria-labelledby="exampleModalLabel"
-                                 aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Delete event</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure you want to delete this event?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                Close
-                                            </button>
-                                            <a href="/crud/controllers/auth/event.php?<?= 'event=delete&id=' . $event['id'] ?>">
-                                                <button type="button"
-                                                        class="btn btn-danger">Confirm
-                                                </button>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <?php
                             // Increment the counter for the next iteration
                             $modalCounter++;

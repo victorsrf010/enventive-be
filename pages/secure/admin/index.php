@@ -8,18 +8,30 @@ $user = user();
 $title = '- App';
 ?>
 
-    <main>
-        <header class="pb-3 mb-4 border-bottom">
-            <a href="../../../index.html" class="d-flex align-items-center text-dark text-decoration-none"><img
-                        src="/crud/assets/images/logo-estg.svg" alt="ESTG" class="mw-100"></a>
-        </header>
-        <div class="row align-items-md-stretch">
-            <a href="../index.php">
-                <button class="btn btn-secondary px-5 me-2 mb-4">Back</button>
+<main>
+    <header class="pb-3 mb-4 border-bottom">
+        <div class='d-flex justify-content-between align-items-center'>
+            <a href="../../../index.html" style="text-decoration: none;">
+                <h1 class='logo' style="font-size: 2em; color: black; font-weight: bold;">
+                    event<span style="color: orange;">ive</span>
+                </h1>
             </a>
-            <?php
-            if (isAuthenticated() && $user['administrator']) {
-                echo '<div class="col-md-6">
+            <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
+                <span class='navbar-toggler-icon'></span>
+            </button>
+        </div>
+    </header>
+    <section class="py-4">
+        <div class="d-flex justify-content">
+            <a href="../index.php">
+                <button class="btn btn-secondary px-5 me-2">Back</button>
+            </a>
+        </div>
+    </section>
+    <div class="row align-items-md-stretch">
+        <?php
+        if (isAuthenticated() && $user['administrator']) {
+            echo '<div class="col-md-6">
             <div class="h-100 p-5 text-bg-dark rounded-3">
                 <h2>Events</h2>
                 <a href="/crud/pages/secure/admin/events/"><button class="btn btn-outline-light px-5"

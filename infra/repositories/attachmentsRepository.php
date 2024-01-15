@@ -68,6 +68,39 @@ function updateAttachment($attachment)
     ]);
 }
 
+function getAllAttachments()
+{
+    $PDOStatement = $GLOBALS['pdo']->query('SELECT * FROM attachments;');
+    $attachments = [];
+    while ($attachment = $PDOStatement->fetch()) {
+        $attachments[] = $attachment;
+    }
+    return $attachments;
+}
+
+function uploadAttachements($file)
+{
+    $allowedTypes = ['jpg', 'jpeg', 'png','pdf'];
+
+    if ($file && $file['error'] === UPLOAD_ERR_OK) {
+        $fileName = basename($file["name"]);
+        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+        if (in_array($fileType, $allowedTypes)) {
+            $attachment = file_get_contents($file["tmp_name"]);
+
+            if ($attachment) {
+                return $attachment;
+            } else {
+                throw new Exception('Erro ao ler o conteúdo do ficheiro.');
+            }
+        } else {
+            throw new Exception('Desculpe, apenas são suportados ficheiros JPG, JPEG, PNG.');
+        }
+    }
+    throw new Exception('Erro ao ler o conteúdo do ficheiro.');
+}
+
 function deleteAttachment($id)
 {
     $PDOStatement = $GLOBALS['pdo']->prepare('DELETE FROM attachments WHERE id = ?;');

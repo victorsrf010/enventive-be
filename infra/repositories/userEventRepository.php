@@ -90,22 +90,25 @@ function isUserInvited($eventId, $userId) {
 
 function getUserInvitedEvents($userId)
 {
-   $eventIds = getEventsByUserId($userId);
+    $eventIds = getEventsByUserId($userId);
 
     if (empty($eventIds)) {
         return [];
     }
 
-    $placeholders = implode(',', array_fill(0, count($eventIds), '?'));
-
-    $sql = "SELECT * FROM users WHERE id IN ($placeholders)";
+    $result = [];
+    $sql = "SELECT * FROM events WHERE id = ?"; // Query for a single userId
     $PDOStatement = $GLOBALS['pdo']->prepare($sql);
 
-    // Bind values to placeholders
-    foreach ($eventIds as $key => $userId) {
-        $PDOStatement->bindValue($key + 1, $userId, PDO::PARAM_INT);
+    foreach ($eventIds as $id) {
+        $PDOStatement->bindValue(1, $id, PDO::PARAM_INT); // Bind each userId
+        $PDOStatement->execute();
+
+        $fetchedData = $PDOStatement->fetchAll(PDO::FETCH_ASSOC);
+        if (!empty($fetchedData)) {
+            $result = array_merge($result, $fetchedData); // Merge results
+        }
     }
 
-    $PDOStatement->execute();
-    return $PDOStatement->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
 }
