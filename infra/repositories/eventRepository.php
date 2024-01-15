@@ -3,7 +3,6 @@ require_once __DIR__ . '/../db/connection.php';
 
 function createEvent($event, $created_by)
 {
-    // Insert event into the events table
     $sqlCreateEvent = "INSERT INTO 
     events (
         name,
@@ -24,7 +23,7 @@ function createEvent($event, $created_by)
 
     $PDOStatementEvent = $GLOBALS['pdo']->prepare($sqlCreateEvent);
 
-    $successEvent = $PDOStatementEvent->execute([
+    return $PDOStatementEvent->execute([
         ':name' => $event['name'],
         ':description' => $event['description'],
         ':event_at' => $event['event_at'],
@@ -32,35 +31,6 @@ function createEvent($event, $created_by)
         ':category_id' => $event['category_id'],
         ':created_by' => $created_by['id']
     ]);
-
-    if ($successEvent) {
-        // If the event was created successfully, get the event ID
-        $event['id'] = $GLOBALS['pdo']->lastInsertId();
-
-        // Insert a record into users_events table to connect the user to the event
-        $sqlCreateUserEvent = "INSERT INTO 
-        users_events (
-            user_id,
-            event_id
-        ) 
-        VALUES (
-            :user_id,
-            :event_id
-        )";
-
-        $PDOStatementUserEvent = $GLOBALS['pdo']->prepare($sqlCreateUserEvent);
-
-        // Assuming $created_by is the user ID
-        $successUserEvent = $PDOStatementUserEvent->execute([
-            ':user_id' => $created_by['id'],
-            ':event_id' => $event['id']
-        ]);
-
-        // Return success only if both event and user_event records were created successfully
-        return $successEvent && $successUserEvent;
-    }
-
-    return false;
 }
 
 function getEventById($id)
@@ -149,4 +119,3 @@ function getUserEvents($user_id) {
 
     return $events;
 }
-

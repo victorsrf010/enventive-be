@@ -47,7 +47,7 @@ function create($req)
 
     if ($success) {
         $_SESSION['success'] = 'Event created successfully!';
-        header('location: /crud/pages/secure/admin/index.php');
+        header('location: /crud/pages/secure/admin/userEvents.php');
     } else {
         // Display an error message on the same page
         $_SESSION['errors'] = ['Failed to create the event. Please try again.'];
@@ -97,5 +97,5 @@ function delete($req)
         $_SESSION['errors'][] = 'Error deleting event.';
     }
 
-    header('location: /crud/pages/secure/admin/index.php');
+    header('location: /crud/pages/secure/admin/userEvents.php');
 }

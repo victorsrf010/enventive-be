@@ -54,3 +54,58 @@ function removeUserFromEvent($user_id, $event_id)
     $PDOStatement->bindValue(2, $event_id, PDO::PARAM_INT);
     return $PDOStatement->execute();
 }
+
+function getInvitedUsers($eventId) {
+    $userIds = getUsersByEventId($eventId);
+
+    // Check if $userIds is not empty
+    if (empty($userIds)) {
+        return [];
+    }
+
+    // Create a string of placeholders for the IN clause
+    $placeholders = implode(',', array_fill(0, count($userIds), '?'));
+
+    // Prepare the SQL query
+    $sql = "SELECT * FROM users WHERE id IN ($placeholders)";
+    $PDOStatement = $GLOBALS['pdo']->prepare($sql);
+
+    // Bind values to placeholders
+    foreach ($userIds as $key => $userId) {
+        $PDOStatement->bindValue($key + 1, $userId, PDO::PARAM_INT);
+    }
+
+    $PDOStatement->execute();
+    return $PDOStatement->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+function isUserInvited($eventId, $userId) {
+    $PDOStatement = $GLOBALS['pdo']->prepare('SELECT * FROM users_events WHERE user_id = ? AND event_id = ?;');
+    $PDOStatement->bindValue(1, $userId, PDO::PARAM_INT);
+    $PDOStatement->bindValue(2, $eventId, PDO::PARAM_INT);
+    $PDOStatement->execute();
+    return $PDOStatement->fetch();
+}
+
+function getUserInvitedEvents($userId)
+{
+   $eventIds = getEventsByUserId($userId);
+
+    if (empty($eventIds)) {
+        return [];
+    }
+
+    $placeholders = implode(',', array_fill(0, count($eventIds), '?'));
+
+    $sql = "SELECT * FROM users WHERE id IN ($placeholders)";
+    $PDOStatement = $GLOBALS['pdo']->prepare($sql);
+
+    // Bind values to placeholders
+    foreach ($eventIds as $key => $userId) {
+        $PDOStatement->bindValue($key + 1, $userId, PDO::PARAM_INT);
+    }
+
+    $PDOStatement->execute();
+    return $PDOStatement->fetchAll(PDO::FETCH_ASSOC);
+}
