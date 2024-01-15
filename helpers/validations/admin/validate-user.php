@@ -1,6 +1,6 @@
 <?php
 
-function validatedUser($req)
+function validatedUser($req, $isUpdate = false)
 {
     foreach ($req as $key => $value) {
         $req[$key] =  trim($req[$key]);
@@ -18,13 +18,15 @@ function validatedUser($req)
         $errors['phoneNumber'] = 'The Mobile phone field cannot be empty and must have 9 numbers.';
     }
 
-    if (!filter_var($req['email'], FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = 'The Email field cannot be empty and must have the email format, for example: nome@example.com.';
-    }
+    if (!$isUpdate) {
+        if (!filter_var($req['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = 'The Email field cannot be empty and must have the email format, for example: nome@example.com.';
+        }
 
-    if (getByEmail($req['email'])) {
-        $errors['email'] = 'Email already registered in our system.';
-        return ['invalid' => $errors];
+        if (getByEmail($req['email'])) {
+            $errors['email'] = 'Email already registered in our system.';
+            return ['invalid' => $errors];
+        }
     }
 
     if (!empty($req['password']) && strlen($req['password']) < 6) {

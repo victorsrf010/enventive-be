@@ -69,7 +69,7 @@ function create($req)
 
 function update($req)
 {
-    $data = validatedUser($req);
+    $data = validatedUser($req, true);
 
     if (isset($data['invalid'])) {
         $_SESSION['errors'] = $data['invalid'];
@@ -92,7 +92,7 @@ function update($req)
 
 function updateProfile($req)
 {
-    $data = validatedUser($req);
+    $data = validatedUser($req, true);
 
     if (isset($data['invalid'])) {
         $_SESSION['errors'] = $data['invalid'];
