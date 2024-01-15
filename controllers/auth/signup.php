@@ -31,7 +31,7 @@ function signUp($req)
 
             setcookie("id", $data['id'], time() + (60 * 60 * 24 * 30), "/");
             setcookie("name", $data['name'], time() + (60 * 60 * 24 * 30), "/");
-            header('location: /crud/');
+            header('location: /crud/pages/secure');
         }
     }
 }

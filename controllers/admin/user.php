@@ -102,6 +102,7 @@ function updateProfile($req)
         $user = user(); 
         $data['id'] = $user['id'];
         $data['administrator'] = $user['administrator'];
+        $data['email'] = $user['email'];
 
         $success = updateUser($data);
 
