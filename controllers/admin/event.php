@@ -5,7 +5,6 @@ require_once __DIR__ . '/../../infra/repositories/attachmentsRepository.php';
 require_once __DIR__ . '/../../helpers/validations/admin/validate-event.php';
 require_once __DIR__ . '/../../helpers/session.php';
 
-
 if (isset($_POST['event'])) {
     if ($_POST['event'] == 'create') {
         create($_POST);
