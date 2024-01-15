@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '../../../../infra/middlewares/middleware-user.php';
-include_once __DIR__ . '../../../../templates/header.php';
+require_once __DIR__ . '/../../../infra/middlewares/middleware-user.php';
+include_once __DIR__ . '/../../../templates/header.php';
 @require_once __DIR__ . '/../../../helpers/session.php';
 
 $title = ' - Profile';
@@ -13,7 +13,7 @@ $user = user();
 <main>
   <section class="py-4">
     <div class="d-flex justify-content">
-      <a href="/crud/"><button type="button" class="btn btn-secondary px-5 me-2">Back</button></a>
+      <a href="../index.php"><button type="button" class="btn btn-secondary px-5 me-2">Back</button></a>
       <a href="./password.php"><button class="btn btn-warning px-2 me-2">Change Password</button></a>
     </div>
   </section>
@@ -52,11 +52,6 @@ $user = user();
         <span class="input-group-text">Phone Number</span>
         <input type="tel" class="form-control" name="phoneNumber" maxlength="9"
           value="<?= isset($_REQUEST['phoneNumber']) ? $_REQUEST['phoneNumber'] : $user['phoneNumber'] ?>" required>
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text">email</span>
-        <input type="email" class="form-control" name="email" maxlength="255"
-          value="<?= isset($_REQUEST['email']) ? $_REQUEST['email'] : $user['email'] ?>" required>
       </div>
       <div class="input-group mb-3">
         <label class="input-group-text" for="inputGroupFile01">Picture</label>
