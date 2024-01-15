@@ -9,9 +9,18 @@ $title = '- App';
 
 <main>
     <header class="pb-3 mb-4 border-bottom">
-        <a href="/" class="d-flex align-items-center text-dark text-decoration-none"><img
-                src="/crud/assets/images/logo-estg.svg" alt="ESTG" class="mw-100"></a>
+        <div class='d-flex justify-content-between align-items-center'>
+            <a style="text-decoration: none;">
+                <h1 class='logo' style="font-size: 2em; color: black; font-weight: bold;">
+                    event<span style="color: orange;">ive</span>
+                </h1>
+            </a>
+            <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
+                <span class='navbar-toggler-icon'></span>
+            </button>
+        </div>
     </header>
+
     <div class="p-5 mb-4 bg-body-tertiary rounded-3">
         <div class="container-fluid py-5">
             <h1 class="display-5 fw-bold">Hello,

@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../../infra/repositories/eventRepository.php';
+require_once __DIR__ . '/../../infra/repositories/attachmentsRepository.php';
 require_once __DIR__ . '/../../helpers/validations/app/validate-event.php';
 require_once __DIR__ . '/../../helpers/session.php';
 
@@ -45,6 +46,29 @@ function create($req)
     $currentUser = user();
     $success = createEvent($data, $currentUser);
 
+    if ($success && isset($_FILES['attachment']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
+        try {
+
+            $attachmentContent = uploadAttachements($_FILES['attachment']);
+
+            $filePath = '/crud/assets/images/uploads' . $_FILES['attachment']['name'];
+            file_put_contents($filePath, $attachmentContent);
+
+            $eventId = $GLOBALS['pdo']->lastInsertId();
+            $attachmentData = [
+                'event_id' => $eventId,
+                'file_path' => $filePath,
+                'file_type' => $_FILES['attachment']['type']
+            ];
+
+            // Save the attachment in the database
+            createAttachment($attachmentData);
+        } catch (Exception $e) {
+            // Handle errors
+            $_SESSION['errors'][] = "File upload error: " . $e->getMessage();
+        }
+    }
+
     if ($success) {
         $_SESSION['success'] = 'Event created successfully!';
         header('location: /crud/pages/secure/user/events');
@@ -59,7 +83,7 @@ function create($req)
 
 function update($req)
 {
-    // Assuming you have a function to get the current user from the session
+
     $currentUser = user();
 
     $data = validateEvent($req);
@@ -71,6 +95,29 @@ function update($req)
         header('location: /crud/pages/secure/user/events/event.php' . $params);
 
         return false;
+    }
+
+    if ($data && isset($_FILES['attachment']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
+        try {
+
+            $attachmentContent = uploadAttachements($_FILES['attachment']);
+
+            $filePath = '/crud/assets/images/uploads/' . $_FILES['attachment']['name'];
+            file_put_contents($filePath, $attachmentContent);
+
+            $eventId = $req['id'];
+            $attachmentData = [
+                'event_id' => $eventId,
+                'file_path' => $filePath,
+                'file_type' => $_FILES['attachment']['type']
+            ];
+
+            // Save the attachment in the database
+            createAttachment($attachmentData);
+        } catch (Exception $e) {
+            // Handle errors
+            $_SESSION['errors'][] = "File upload error: " . $e->getMessage();
+        }
     }
 
     // Set the created_by field based on the current user
