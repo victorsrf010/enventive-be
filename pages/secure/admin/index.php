@@ -13,6 +13,13 @@ $title = '- App';
         <a href="/" class="d-flex align-items-center text-dark text-decoration-none"><img
                     src="/crud/assets/images/logo-estg.svg" alt="ESTG" class="mw-100"></a>
     </header>
+    <section class="py-4">
+        <div class="d-flex justify-content">
+            <a href="/crud/pages/secure/">
+                <button class="btn btn-secondary px-5 me-2">Back</button>
+            </a>
+        </div>
+    </section>
     <div class="row align-items-md-stretch">
         <?php
         if (isAuthenticated() && $user['administrator']) {

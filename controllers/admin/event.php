@@ -145,5 +145,5 @@ function delete($req)
         $_SESSION['errors'][] = 'Error deleting event.';
     }
 
-    header('location: /crud/pages/secure/admin/index.php');
+    header('location: /crud/pages/secure/admin/events/index.php');
 }

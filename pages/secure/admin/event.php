@@ -82,20 +82,20 @@ if (isset($_REQUEST['id'])) {
                 </select>
             </div>
 
-            <div class="input-group mb-3">
-                <input type="file" class="form-control" name="attachment" id="fileInput" style="display:none;"
-                       onchange="updateFileName(this)">
-                <label class="input-group-text rounded-start" for="fileInput">Add attachment</label>
-                <input type="text" class="form-control rounded-end" readonly placeholder="No file selected"
-                       id="file-chosen">
-            </div>
+            <?php if (isset($event['id'])): ?>
+                <div class="input-group mb-3">
+                    <input type="file" class="form-control" name="attachment" id="fileInput" style="display:none;" onchange="updateFileName(this)">
+                    <label class="input-group-text rounded-start" for="fileInput">Add attachment</label>
+                    <input type="text" class="form-control rounded-end" readonly placeholder="No file selected" id="file-chosen">
+                </div>
 
-            <script>
-                function updateFileName(input) {
-                    var fileName = input.files[0].name;
-                    document.getElementById('file-chosen').value = fileName;
-                }
-            </script>
+                <script>
+                    function updateFileName(input) {
+                        var fileName = input.files[0].name;
+                        document.getElementById('file-chosen').value = fileName;
+                    }
+                </script>
+            <?php endif; ?>
 
             <div class="d-grid col-4 mx-auto">
                 <input type="hidden" name="id" value="<?= isset($event['id']) ? $event['id'] : '' ?>">
