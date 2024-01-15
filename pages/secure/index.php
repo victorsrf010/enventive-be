@@ -10,7 +10,7 @@ $title = '- App';
 <main>
     <header class="pb-3 mb-4 border-bottom">
         <div class='d-flex justify-content-between align-items-center'>
-            <a style="text-decoration: none;">
+            <a href="../../index.html" style="text-decoration: none;">
                 <h1 class='logo' style="font-size: 2em; color: black; font-weight: bold;">
                     event<span style="color: orange;">ive</span>
                 </h1>

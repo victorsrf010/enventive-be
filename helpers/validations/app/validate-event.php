@@ -16,6 +16,14 @@ function validateEvent($req)
         $errors['description'] = 'The Description field cannot be empty and must be at least 3 characters long.';
     }
 
+    // Check if event date is in the future
+    $eventDate = strtotime($req['event_at']);
+    $now = time();
+
+    if ($eventDate <= $now) {
+        $errors['event_at'] = 'The Event Date must be in the future.';
+    }
+
     // Check if there are any errors
     if (!empty($errors)) {
         return ['invalid' => $errors];

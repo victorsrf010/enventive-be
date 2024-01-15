@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../../infra/repositories/eventRepository.php';
+require_once __DIR__ . '/../../../../infra/repositories/userRepository.php';
 require_once __DIR__ . '/../../../../infra/middlewares/middleware-administrator.php';
 require_once __DIR__ . '/../../../../templates/header.php';
 
@@ -15,7 +16,7 @@ $title = ' - Admin management';
         <main class="bg-light">
             <section class="py-4">
                 <div class="d-flex justify-content">
-                    <a href="/crud/pages/secure/admin/">
+                    <a href="../index.php">
                         <button class="btn btn-secondary px-5 me-2">Back</button>
                     </a>
                     <a href="../event.php">
@@ -49,6 +50,7 @@ $title = ' - Admin management';
                             <th scope="col">Name</th>
                             <th scope="col">Event At</th>
                             <th scope="col">Location</th>
+                            <th scope="col">Owner</th>
                             <th scope="col">Manage</th>
                         </tr>
                         </thead>
@@ -65,6 +67,13 @@ $title = ' - Admin management';
                                 </td>
                                 <td>
                                     <?= $event['location'] ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    $user = getById($event['created_by']);
+
+                                    echo $user['name'] . " " . $user['lastname']
+                                    ?>
                                 </td>
                                 <td>
                                     <div class="d-flex justify-content">

@@ -11,7 +11,7 @@ $title = '- App';
 <main>
     <header class="pb-3 mb-4 border-bottom">
         <div class='d-flex justify-content-between align-items-center'>
-            <a style="text-decoration: none;">
+            <a href="../../../index.html" style="text-decoration: none;">
                 <h1 class='logo' style="font-size: 2em; color: black; font-weight: bold;">
                     event<span style="color: orange;">ive</span>
                 </h1>
@@ -23,7 +23,7 @@ $title = '- App';
     </header>
     <section class="py-4">
         <div class="d-flex justify-content">
-            <a href="/crud/pages/secure/">
+            <a href="../index.php">
                 <button class="btn btn-secondary px-5 me-2">Back</button>
             </a>
         </div>
@@ -37,22 +37,17 @@ $title = '- App';
                 <a href="/crud/pages/secure/admin/events/"><button class="btn btn-outline-light px-5"
                                                                       type="button">See more</button></a>
             </div>
-        </div>';
-        }
-        ?>
-
-        <?php
-        if (isAuthenticated() && $user['administrator']) {
-            echo '<div class="col-md-6">
+        </div>
+        <div class="col-md-6">
                 <div class="h-100 p-5 bg-body-tertiary border rounded-3">
                     <h2>Users</h2>
                     <a href="/crud/pages/secure/admin/users/"><button class="btn btn-outline-success" type="button">See more</button></a>
                 </div>
             </div>';
-        }
-        ?>
-    </div>
-</main>
+            }
+            ?>
+        </div>
+    </main>
 
 <?php
 include_once __DIR__ . '/../../../templates/footer.php';
