@@ -61,10 +61,8 @@ function create($req)
                 'file_type' => $_FILES['attachment']['type']
             ];
 
-            // Save the attachment in the database
             createAttachment($attachmentData);
         } catch (Exception $e) {
-            // Handle errors
             $_SESSION['errors'][] = "File upload error: " . $e->getMessage();
         }
     }
@@ -73,7 +71,6 @@ function create($req)
         $_SESSION['success'] = 'Event created successfully!';
         header('location: /crud/pages/secure/admin/events');
     } else {
-        // Display an error message on the same page
         $_SESSION['errors'] = ['Failed to create the event. Please try again.'];
         $params = '?' . http_build_query($req);
         header('location: /crud/pages/secure/admin/event.php' . $params);
@@ -83,7 +80,6 @@ function create($req)
 
 function update($req)
 {
-
     $currentUser = user();
 
     $data = validateEvent($req);
@@ -93,7 +89,6 @@ function update($req)
         $_SESSION['action'] = 'update';
         $params = '?' . http_build_query($req);
         header('location: /crud/pages/secure/admin/events/event.php' . $params);
-
         return false;
     }
 
@@ -127,18 +122,16 @@ function update($req)
         }
     }
 
-    // Set the created_by field based on the current user
-    $data['created_by'] = $currentUser['id'];
-
-    $success = updateEvent($data);
+    $success = updateEventWithoutOwner($data);
 
     if ($success) {
         $_SESSION['success'] = 'Event successfully changed!';
         $data['action'] = 'update';
         $params = '?' . http_build_query($data);
-        header('location: /crud/pages/secure/user/events/event.php' . $params);
+        header('location: /crud/pages/secure/admin/event.php' . $params);
     }
 }
+
 
 function delete($req)
 {

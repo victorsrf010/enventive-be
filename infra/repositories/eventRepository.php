@@ -105,6 +105,30 @@ function updateEvent($event)
     ]);
 }
 
+function updateEventWithoutOwner($event)
+{
+    $sqlUpdate = "UPDATE  
+    events SET
+        name = :name, 
+        description = :description, 
+        event_at = :event_at, 
+        location = :location, 
+        category_id = :category_id
+    WHERE id = :id;";
+
+    $PDOStatement = $GLOBALS['pdo']->prepare($sqlUpdate);
+
+    return $PDOStatement->execute([
+        ':id' => $event['id'],
+        ':name' => $event['name'],
+        ':description' => $event['description'],
+        ':event_at' => $event['event_at'],
+        ':location' => $event['location'],
+        ':category_id' => $event['category_id'],
+    ]);
+}
+
+
 function deleteEvent($id)
 {
     $GLOBALS['pdo']->beginTransaction();

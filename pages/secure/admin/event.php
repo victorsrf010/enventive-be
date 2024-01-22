@@ -4,6 +4,7 @@ require_once __DIR__ . '/../../../templates/header.php';
 require_once __DIR__ . '/../../../infra/repositories/categoryRepository.php';
 require_once __DIR__ . '/../../../infra/repositories/attachmentsRepository.php';
 require_once __DIR__ . '/../../../infra/repositories/eventRepository.php';
+require_once __DIR__ . '/../../../infra/repositories/userEventRepository.php';
 
 $categories = getAllCategories();
 $eventId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
