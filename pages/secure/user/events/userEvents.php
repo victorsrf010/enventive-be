@@ -74,64 +74,71 @@ $title = ' - Your events';
                         </thead>
                         <tbody>
                         <?php
-                        foreach ($events as $event) {
-                            ?>
-                            <tr>
-                                <th scope="row">
-                                    <?= $event['name'] ?>
-                                </th>
-                                <td>
-                                    <?= $event['event_at'] ?>
-                                </td>
-                                <td>
-                                    <?= $event['location'] ?>
-                                </td>
-                                <th scope="row">
-                                    <?php
-                                    $category = getCategoryById($event['category_id']);
-
-                                    echo $category['name'];
-                                    ?>
-                                </th>
-                                <td>
-                                    <div class="d-flex justify-content">
-                                        <a href="/crud/controllers/auth/event.php?event=update&id=<?= $event['id'] ?>">
-                                            <button type="button" class="btn btn-primary me-2">Update</button>
-                                        </a>
-                                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                                data-bs-target="#delete<?= $event['id'] ?>">Delete
-                                        </button>
-                                    </div>
-                                </td>
-
-                            </tr>
-                            <div class="modal fade" id="delete<?= $event['id'] ?>" tabindex="-1"
-                                 aria-labelledby="exampleModalLabel"
-                                 aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Delete event</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure you want to delete this event?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                Close
-                                            </button>
-                                            <a href="/crud/controllers/auth/event.php?<?= 'event=delete&id=' . $event['id'] ?>">
-                                                <button type="button"
-                                                        class="btn btn-danger">Confirm
-                                                </button>
+                        if (empty($events)) {
+                            echo '<tr><td colspan="4" class="text-center">Looks like there are no events yet. Why not create one?</td></tr>';
+                        } else {
+                            foreach ($events as $event) {
+                                ?>
+                                <tr>
+                                    <th scope="row">
+                                        <?= $event['name'] ?>
+                                    </th>
+                                    <td>
+                                        <?= $event['event_at'] ?>
+                                    </td>
+                                    <td>
+                                        <?= $event['location'] ?>
+                                    </td>
+                                    <th scope="row">
+                                        <?php
+                                        $category = getCategoryById($event['category_id']);
+    
+                                        echo $category['name'];
+                                        ?>
+                                    </th>
+                                    <td>
+                                        <div class="d-flex justify-content">
+                                            <a href="/crud/controllers/auth/event.php?event=view&id=<?= $event['id'] ?>">
+                                                <button type="button" class="btn btn-primary me-2">View</button>
                                             </a>
+                                            <a href="/crud/controllers/auth/event.php?event=update&id=<?= $event['id'] ?>">
+                                                <button type="button" class="btn btn-primary me-2">Update</button>
+                                            </a>
+                                            <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                                    data-bs-target="#delete<?= $event['id'] ?>">Delete
+                                            </button>
+                                        </div>
+                                    </td>
+    
+                                </tr>
+                                <div class="modal fade" id="delete<?= $event['id'] ?>" tabindex="-1"
+                                     aria-labelledby="exampleModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete event</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete this event?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    Close
+                                                </button>
+                                                <a href="/crud/controllers/auth/event.php?<?= 'event=delete&id=' . $event['id'] ?>">
+                                                    <button type="button"
+                                                            class="btn btn-danger">Confirm
+                                                    </button>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <?php
+                                <?php
+                            }
                         }
                         ?>
                         </tbody>
