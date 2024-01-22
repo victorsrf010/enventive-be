@@ -12,8 +12,13 @@ $currentUserId = userId();
 if ($eventId) {
     $event = getEventById($eventId);
 
-    if ($event && $event['created_by'] !== $currentUserId) {
-        header("Location: ../");
+    if ($event) {
+        if ($event['created_by'] != $currentUserId) {
+            if (!isUserInvited($eventId, $currentUserId)) {
+                header("Location: ../");
+                exit();
+            }
+        }
     }
 
     $attachments = getAttachmentsByEventId($eventId);
