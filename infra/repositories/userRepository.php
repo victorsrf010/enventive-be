@@ -62,19 +62,16 @@ function getAll($search = null)
     $query = 'SELECT * FROM users';
     $parameters = [];
 
-    // Add search filtering for name, lastname, email, or phone number
     if (!empty($search)) {
         $searchTerm = '%' . $search . '%';
         $query .= ' WHERE (name LIKE :search OR lastname LIKE :search OR email LIKE :search OR phoneNumber LIKE :search)';
         $parameters[':search'] = $searchTerm;
     }
 
-    // Add ORDER BY clause (modify as needed)
-    $query .= ' ORDER BY name ASC'; // Example: sorting by name in ascending order
+    $query .= ' ORDER BY name ASC';
 
     $PDOStatement = $GLOBALS['pdo']->prepare($query);
 
-    // Bind parameters
     foreach ($parameters as $key => $value) {
         $PDOStatement->bindValue($key, $value);
     }
