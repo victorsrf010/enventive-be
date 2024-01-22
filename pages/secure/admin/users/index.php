@@ -3,7 +3,9 @@ require_once __DIR__ . '/../../../../infra/repositories/userRepository.php';
 require_once __DIR__ . '/../../../../infra/middlewares/middleware-administrator.php';
 require_once __DIR__ . '/../../../../templates/header.php';
 
-$users = getAll();
+$searchTerm = isset($_GET['search']) ? $_GET['search'] : null;
+
+$users = getAll($searchTerm);
 $title = ' - Admin management';
 ?>
 
@@ -17,6 +19,10 @@ $title = ' - Admin management';
       <div class="d-flex justify-content">
         <a href="../index.php"><button class="btn btn-secondary px-5 me-2">Back</button></a>
         <a href="../user.php"><button class="btn btn-success px-4 me-2">Create user</button></a>
+          <form action="" method="GET">
+              <input class="btn search-box" type="text" name="search" placeholder="Search name or location" value="<?= htmlspecialchars($searchTerm) ?>">
+              <button type="submit" class="btn btn-primary">Search</button>
+          </form>
       </div>
     </section>
     <section>

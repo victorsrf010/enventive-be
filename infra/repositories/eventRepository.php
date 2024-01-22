@@ -41,24 +41,44 @@ function getEventById($id)
     return $PDOStatement->fetch();
 }
 
-function getAllEvents($category_id = null)
+function getAllEvents($category_id = null, $search = null)
 {
     $query = 'SELECT * FROM events';
+    $whereClauses = [];
+    $parameters = [];
 
-
-    if ($category_id) {
-        $query .= 'AND category_id = :category_id';
+    // Add category filtering if a category_id is provided and it's not 'all'
+    if ($category_id && $category_id !== 'all') {
+        $whereClauses[] = 'category_id = :category_id';
+        $parameters[':category_id'] = $category_id;
     }
+
+    // Add search filtering for name or location
+    if (!empty($search)) {
+        $searchTerm = '%' . $search . '%';
+        $whereClauses[] = '(name LIKE :search OR location LIKE :search)';
+        $parameters[':search'] = $searchTerm;
+    }
+
+    if (count($whereClauses) > 0) {
+        $query .= ' WHERE ' . implode(' AND ', $whereClauses);
+    }
+
+    // Add ORDER BY clause
+    $query .= ' ORDER BY event_at DESC'; // or ASC for ascending order
 
     $PDOStatement = $GLOBALS['pdo']->prepare($query);
 
-    if ($category_id) {
-        $PDOStatement->bindValue(':category_id', $category_id, PDO::PARAM_INT);
+    // Bind parameters
+    foreach ($parameters as $key => $value) {
+        $PDOStatement->bindValue($key, $value);
     }
 
     $PDOStatement->execute();
     return $PDOStatement->fetchAll();
 }
+
+
 
 function updateEvent($event)
 {
@@ -90,41 +110,54 @@ function deleteEvent($id)
     $GLOBALS['pdo']->beginTransaction();
 
     try {
-        // First, delete entries from the user_events table
         $PDOStatementUserEvent = $GLOBALS['pdo']->prepare('DELETE FROM users_events WHERE event_id = ?;');
         $PDOStatementUserEvent->bindValue(1, $id, PDO::PARAM_INT);
         $PDOStatementUserEvent->execute();
 
-        // Second, delete entries from the attachments table (if applicable)
+
         $PDOStatementAttachments = $GLOBALS['pdo']->prepare('DELETE FROM attachments WHERE event_id = ?;');
         $PDOStatementAttachments->bindValue(1, $id, PDO::PARAM_INT);
         $PDOStatementAttachments->execute();
 
-        // Finally, delete the event itself
+
         $PDOStatementEvent = $GLOBALS['pdo']->prepare('DELETE FROM events WHERE id = ?;');
         $PDOStatementEvent->bindValue(1, $id, PDO::PARAM_INT);
         $PDOStatementEvent->execute();
 
-        // Commit the transaction if all queries are successful
+
         $GLOBALS['pdo']->commit();
 
         return true;
     } catch (PDOException $e) {
-        // An error occurred, rollback the transaction
         $GLOBALS['pdo']->rollBack();
         return false;
     }
 }
 
-function getUserEvents($user_id) {
-    $PDOStatement = $GLOBALS['pdo']->prepare('SELECT * FROM events WHERE created_by = ?;');
-    $PDOStatement->bindValue(1, $user_id, PDO::PARAM_INT);
-    $PDOStatement->execute();
+function getUserEvents($user_id, $category_id = null, $search = null) {
+    $query = 'SELECT * FROM events WHERE created_by = :user_id';
+    $parameters = [':user_id' => $user_id];
 
-    $events = [];
-    while ($event = $PDOStatement->fetch(PDO::FETCH_ASSOC)) {
-        $events[] = $event;
+    if ($category_id && $category_id !== 'all') {
+        $query .= ' AND category_id = :category_id';
+        $parameters[':category_id'] = $category_id;
     }
 
-    return $events;
+    if (!empty($search)) {
+        $searchTerm = '%' . $search . '%';
+        $query .= ' AND (name LIKE :search OR location LIKE :search)';
+        $parameters[':search'] = $searchTerm;
+    }
+
+    $query .= ' ORDER BY event_at DESC';
+
+    $PDOStatement = $GLOBALS['pdo']->prepare($query);
+
+    foreach ($parameters as $key => $value) {
+        $PDOStatement->bindValue($key, $value);
+    }
+
+    $PDOStatement->execute();
+    return $PDOStatement->fetchAll();
 }
+
