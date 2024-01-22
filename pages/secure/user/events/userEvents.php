@@ -1,10 +1,13 @@
 <?php
 require_once __DIR__ . '/../../../../infra/repositories/eventRepository.php';
+require_once __DIR__ . '/../../../../infra/repositories/categoryRepository.php';
 require_once __DIR__ . '/../../../../helpers/session.php';
 require_once __DIR__ . '/../../../../templates/header.php';
 
 $user = userId();
-$events = getUserEvents($user);
+$selectedCategory = isset($_GET['category']) ? $_GET['category'] : null;
+$searchTerm = isset($_GET['search']) ? $_GET['search'] : null;
+$events = getUserEvents($user, $selectedCategory, $searchTerm);
 $title = ' - Your events';
 ?>
 
@@ -22,6 +25,21 @@ $title = ' - Your events';
                     <a href="event.php">
                         <button class="btn btn-success px-4 me-2">Create event</button>
                     </a>
+                    <form action="" method="GET">
+                        <select class="btn btn-secondary me-2" id="category" name="category" required onchange="this.form.submit()">
+                            <option value="all">All</option>
+                            <?php
+                            $categories = getAllCategories();
+                            foreach ($categories as $category) {
+                                $selected = (isset($_GET['category']) && $_GET['category'] == $category['id']) ? 'selected' : '';
+                                echo '<option value="'.htmlspecialchars($category['id']).'" '.$selected.'>'.htmlspecialchars($category['name']).'</option>';
+                            }
+                            ?>
+                        </select>
+                        <input class="btn search-box" type="text" name="search" placeholder="Search name or location" value="<?= htmlspecialchars($searchTerm) ?>">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </form>
+
                 </div>
             </section>
             <section>
@@ -50,6 +68,7 @@ $title = ' - Your events';
                             <th scope="col">Name</th>
                             <th scope="col">Event At</th>
                             <th scope="col">Location</th>
+                            <th scope="col">Category</th>
                             <th scope="col">Manage</th>
                         </tr>
                         </thead>
@@ -67,6 +86,13 @@ $title = ' - Your events';
                                 <td>
                                     <?= $event['location'] ?>
                                 </td>
+                                <th scope="row">
+                                    <?php
+                                    $category = getCategoryById($event['category_id']);
+
+                                    echo $category['name'];
+                                    ?>
+                                </th>
                                 <td>
                                     <div class="d-flex justify-content">
                                         <a href="/crud/controllers/auth/event.php?event=update&id=<?= $event['id'] ?>">

@@ -57,15 +57,29 @@ function getByEmail($email)
     return $PDOStatement->fetch();
 }
 
-function getAll()
+function getAll($search = null)
 {
-    $PDOStatement = $GLOBALS['pdo']->query('SELECT * FROM users;');
-    $users = [];
-    while ($listaDeusers = $PDOStatement->fetch()) {
-        $users[] = $listaDeusers;
+    $query = 'SELECT * FROM users';
+    $parameters = [];
+
+    if (!empty($search)) {
+        $searchTerm = '%' . $search . '%';
+        $query .= ' WHERE (name LIKE :search OR lastname LIKE :search OR email LIKE :search OR phoneNumber LIKE :search)';
+        $parameters[':search'] = $searchTerm;
     }
-    return $users;
+
+    $query .= ' ORDER BY name ASC';
+
+    $PDOStatement = $GLOBALS['pdo']->prepare($query);
+
+    foreach ($parameters as $key => $value) {
+        $PDOStatement->bindValue($key, $value);
+    }
+
+    $PDOStatement->execute();
+    return $PDOStatement->fetchAll();
 }
+
 
 function updateUser($user)
 {

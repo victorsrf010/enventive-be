@@ -84,6 +84,36 @@ $success = $PDOStatement->execute([
 
 echo 'Default user created!';
 
+#DEFAULT USER TO ADD
+$regularUser = [
+    'name' => 'Regular',
+    'lastname' => 'User',
+    'phoneNumber' => '987654321',
+    'email' => 'regular@gmail.com',
+    'foto' => null,
+    'administrator' => false,
+    'password' => '123456'
+];
+
+#HASH PWD
+$regularUser['password'] = password_hash($regularUser['password'], PASSWORD_DEFAULT);
+
+#PREPARE QUERY
+$PDOStatement = $GLOBALS['pdo']->prepare($sqlCreate);
+
+#EXECUTE
+$success = $PDOStatement->execute([
+    ':name' => $regularUser['name'],
+    ':lastname' => $regularUser['lastname'],
+    ':phoneNumber' => $regularUser['phoneNumber'],
+    ':email' => $regularUser['email'],
+    ':foto' => $regularUser['foto'],
+    ':administrator' => $regularUser['administrator'],
+    ':password' => $regularUser['password']
+]);
+
+echo 'Regular user created!';
+
 # CREATE CATEGORIES TABLE
 $pdo->exec(
     'CREATE TABLE categories (
@@ -133,11 +163,20 @@ $pdo->exec(
 );
 echo 'Table attachments created!' . PHP_EOL;
 
-# INSERT DEFAULT CATEGORY
-$pdo->exec(
-    'INSERT INTO categories (name) VALUES ("Default Category");'
-);
-echo 'Default category inserted!' . PHP_EOL;
+# INSERT CATEGORIES
+$categories = [
+    'Music & Concerts', 'Sports & Fitness', 'Education & Workshops',
+    'Arts & Theater', 'Social & Networking', 'Food & Drink',
+    'Technology & Innovation', 'Health & Wellness', 'Family & Kids',
+    'Charity & Causes', 'Entertainment & Lifestyle', 'Business & Professional',
+    'Travel & Outdoor', 'Government & Politics', 'Religious & Spiritual'
+];
+
+foreach ($categories as $category) {
+    $pdo->exec("INSERT INTO categories (name) VALUES (\"$category\");");
+    echo "Category '$category' inserted!" . PHP_EOL;
+}
+
 
 # INSERT DEFAULT EVENT
 $pdo->exec(

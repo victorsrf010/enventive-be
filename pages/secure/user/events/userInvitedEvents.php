@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../../infra/repositories/eventRepository.php';
+require_once __DIR__ . '/../../../../infra/repositories/categoryRepository.php';
 require_once __DIR__ . '/../../../../infra/repositories/userEventRepository.php';
 require_once __DIR__ . '/../../../../helpers/session.php';
 require_once __DIR__ . '/../../../../templates/header.php';
@@ -41,6 +42,7 @@ $title = ' - Your events';
                         <th scope="col">Name</th>
                         <th scope="col">Event At</th>
                         <th scope="col">Location</th>
+                        <th scope="col">Category</th>
                         <th scope="col">Manage</th>
                     </tr>
                     </thead>
@@ -66,6 +68,13 @@ $title = ' - Your events';
                                 <td>
                                     <?= $event['location'] ?>
                                 </td>
+                                <th scope="row">
+                                    <?php
+                                    $category = getCategoryById($event['category_id']);
+
+                                    echo $category['name'];
+                                    ?>
+                                </th>
                                 <td>
                                     <a>
                                         <button type="button" class="btn btn-primary me-2">See More</button>
