@@ -92,31 +92,38 @@ function update($req)
         $_SESSION['errors'] = $data['invalid'];
         $_SESSION['action'] = 'update';
         $params = '?' . http_build_query($req);
-        header('location: /crud/pages/secure/admin/event.php' . $params);
+        header('location: /crud/pages/secure/admin/events/event.php' . $params);
 
         return false;
     }
 
-    if ($data && isset($_FILES['attachment']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
-        try {
+    if (isset($_FILES['attachment']) && count($_FILES['attachment']['name']) > 0) {
+        for ($i = 0; $i < count($_FILES['attachment']['name']); $i++) {
+            if ($_FILES['attachment']['error'][$i] === UPLOAD_ERR_OK) {
+                try {
+                    $currentFile = [
+                        'name' => $_FILES['attachment']['name'][$i],
+                        'tmp_name' => $_FILES['attachment']['tmp_name'][$i],
+                        'type' => $_FILES['attachment']['type'][$i],
+                        'error' => $_FILES['attachment']['error'][$i],
+                        'size' => $_FILES['attachment']['size'][$i]
+                    ];
+                    $attachmentContent = uploadAttachements($currentFile);
+                    $filePath = '/crud/assets/images/uploads/' . $_FILES['attachment']['name'][$i];
+                    file_put_contents($filePath, $attachmentContent);
 
-            $attachmentContent = uploadAttachements($_FILES['attachment']);
+                    $eventId = isset($req['id']) ? $req['id'] : $GLOBALS['pdo']->lastInsertId();
+                    $attachmentData = [
+                        'event_id' => $eventId,
+                        'file_path' => $filePath,
+                        'file_type' => $_FILES['attachment']['type'][$i]
+                    ];
 
-            $filePath = '/crud/assets/images/uploads/' . $_FILES['attachment']['name'];
-            file_put_contents($filePath, $attachmentContent);
-
-            $eventId = $req['id'];
-            $attachmentData = [
-                'event_id' => $eventId,
-                'file_path' => $filePath,
-                'file_type' => $_FILES['attachment']['type']
-            ];
-
-            // Save the attachment in the database
-            createAttachment($attachmentData);
-        } catch (Exception $e) {
-            // Handle errors
-            $_SESSION['errors'][] = "File upload error: " . $e->getMessage();
+                    createAttachment($attachmentData);
+                } catch (Exception $e) {
+                    $_SESSION['errors'][] = "File upload error: " . $e->getMessage();
+                }
+            }
         }
     }
 
@@ -129,7 +136,7 @@ function update($req)
         $_SESSION['success'] = 'Event successfully changed!';
         $data['action'] = 'update';
         $params = '?' . http_build_query($data);
-        header('location: /crud/pages/secure/admin/event.php' . $params);
+        header('location: /crud/pages/secure/user/events/event.php' . $params);
     }
 }
 

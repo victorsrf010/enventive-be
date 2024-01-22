@@ -9,12 +9,17 @@ require_once __DIR__ . '/../../../../infra/repositories/userEventRepository.php'
 $categories = getAllCategories();
 $eventId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $invitedUsers = getInvitedUsers($eventId);
-$attachments = getAttachmentsByEventId(isset($_REQUEST['id']) ? $_REQUEST['id'] : null);
-$title = ' - Event';
-if (isset($_REQUEST['id'])) {
-    $event = getEventById($_REQUEST['id']);
-    // Now $event contains the event data which can be used to repopulate the form
+
+if (isset($_GET['id'])) {
+    $eventId = $_GET['id'];
+    $event = getEventById($eventId);
+    $attachments = getAttachmentsByEventId($eventId);
+} else {
+    $attachments = [];
+    $event = null;
 }
+
+$title = ' - Event';
 ?>
 
 <main>
@@ -85,15 +90,15 @@ if (isset($_REQUEST['id'])) {
 
             <?php if (isset($event['id'])): ?>
                 <div class="input-group mb-3">
-                    <input type="file" class="form-control" name="attachment" id="fileInput" style="display:none;" onchange="updateFileName(this)">
+                    <input type="file" class="form-control" name="attachment[]" id="fileInput" multiple style="display:none;" onchange="updateFileNames(this)">
                     <label class="input-group-text rounded-start" for="fileInput">Add attachment</label>
                     <input type="text" class="form-control rounded-end" readonly placeholder="No file selected" id="file-chosen">
                 </div>
 
                 <script>
-                    function updateFileName(input) {
-                        var fileName = input.files[0].name;
-                        document.getElementById('file-chosen').value = fileName;
+                    function updateFileNames(input) {
+                        var fileNames = Array.from(input.files).map(function(file) { return file.name; }).join(', ');
+                        document.getElementById('file-chosen').value = fileNames;
                     }
                 </script>
             <?php endif; ?>
@@ -110,14 +115,14 @@ if (isset($_REQUEST['id'])) {
 
     <?php if ($eventId): ?>
         <section class='pb-4'>
-            <!-- Button to trigger the modal -->
+
             <div class="d-flex justify-content">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#inviteModal">
                     Invite
                 </button>
             </div>
 
-            <!-- Modal for inviting users -->
+
             <div class="modal fade" id="inviteModal" tabindex="-1" aria-labelledby="inviteModalLabel"
                  aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">

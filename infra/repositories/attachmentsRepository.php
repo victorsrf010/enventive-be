@@ -80,26 +80,28 @@ function getAllAttachments()
 
 function uploadAttachements($file)
 {
-    $allowedTypes = ['jpg', 'jpeg', 'png','pdf'];
+    $allowedTypes = ['jpg', 'jpeg', 'png', 'pdf'];
 
-    if ($file && $file['error'] === UPLOAD_ERR_OK) {
-        $fileName = basename($file["name"]);
+    if ($file['error'] === UPLOAD_ERR_OK) {
+        $fileName = basename($file['name']);
         $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
         if (in_array($fileType, $allowedTypes)) {
-            $attachment = file_get_contents($file["tmp_name"]);
+            $attachmentContent = file_get_contents($file['tmp_name']);
 
-            if ($attachment) {
-                return $attachment;
+            if ($attachmentContent) {
+                return $attachmentContent;
             } else {
-                throw new Exception('Erro ao ler o conteúdo do ficheiro.');
+                throw new Exception('Error reading file content.');
             }
         } else {
-            throw new Exception('Desculpe, apenas são suportados ficheiros JPG, JPEG, PNG.');
+            throw new Exception('Sorry, only JPG, JPEG, PNG, and PDF files are allowed.');
         }
+    } else {
+        throw new Exception('Error uploading file.');
     }
-    throw new Exception('Erro ao ler o conteúdo do ficheiro.');
 }
+
 
 function deleteAttachment($id)
 {

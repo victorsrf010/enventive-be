@@ -19,6 +19,6 @@ function delete($req)
         $_SESSION['errors'][] = 'Error deleting attachment.';
     }
 
-    $eventId = $attachment['event_id'];
-    header('location: /crud/pages/secure/admin/event.php?id=' . $eventId);
+    // Redirect back to the same page
+    header('location: ' . $_SERVER['HTTP_REFERER']);
 }
