@@ -83,7 +83,9 @@ $title = ' - Event';
                 <label class="input-group-text" for="category">Category</label>
                 <select class="form-select" id="category" name="category_id" required>
                     <?php foreach ($categories as $category): ?>
-                        <option value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
+                        <option value="<?= $category['id'] ?>" <?= isset($event['category_id']) && $event['category_id'] == $category['id'] ? 'selected' : '' ?>>
+                            <?= $category['name'] ?>
+                        </option>
                     <?php endforeach; ?>
                 </select>
             </div>
