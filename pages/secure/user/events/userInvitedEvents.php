@@ -76,8 +76,8 @@ $title = ' - Your events';
                                     ?>
                                 </th>
                                 <td>
-                                    <a>
-                                        <button type="button" class="btn btn-primary me-2">See More</button>
+                                    <a href="/crud/controllers/auth/event.php?event=view&id=<?= $event['id'] ?>">
+                                        <button type="button" class="btn btn-primary me-2">View</button>
                                     </a>
                                 </td>
                             </tr>

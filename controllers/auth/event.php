@@ -30,6 +30,16 @@ if (isset($_GET['event'])) {
     if ($_GET['event'] == 'delete') {
         delete($_GET);
     }
+
+    if ($_GET['event'] == 'view') {
+        $event = getEventById($_GET['id']);
+        $params = '?' . http_build_query($event);
+        header('location: /crud/pages/secure/user/events/event/info.php' . $params);
+    }
+}
+
+if (isset($_GET['event']) && $_GET['event'] == 'download' && isset($_GET['attachment_id'])) {
+    downloadAttachment($_GET['attachment_id']);
 }
 
 function create($req)
@@ -152,4 +162,24 @@ function delete($req)
     }
 
     header('location: /crud/pages/secure/user/events');
+}
+
+function downloadAttachment($attachmentId)
+{
+    $attachment = getAttachmentById($attachmentId);
+
+    if ($attachment) {
+        $filePath = $attachment['file_path'];
+        $fileName = basename($filePath);
+
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . $fileName . '"');
+        header('Content-Length: ' . filesize($filePath));
+
+        readfile($filePath);
+        exit;
+    } else {
+        // Handle the case where the attachment is not found
+        echo 'Attachment not found.';
+    }
 }
